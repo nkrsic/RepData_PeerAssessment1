@@ -90,32 +90,6 @@ dd$interval[ii]
 dd$avg_steps[ii]
 ```
 
-## nkrsic -- The time series
-
-```{r results="hide"}
-date_tags <- as.character( d_final$date )
-n_dates <- length(date_tags)
-1 : n_dates
-plot( 1:n_dates, 
-      y=d_final$total_steps, 
-      type="l", 
-      lwd="2", 
-      col="dark red", 
-      main="Total steps by day",
-      xlab="Day",
-      ylab="Total no. steps", 
-      ljoin=2
-    )
-
-points( x=1:n_dates, 
-        y=d_final$total_steps , 
-        pch=20,
-        col="dark red"
-      )    
-# Might be a good idea to account for missing
-# dates by some signal. 
-```
-
 
 ## Imputing missing values
 
@@ -178,8 +152,7 @@ print( median_2 - median_1 )
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
-weekdays( imputed_d$date )
+```{r results="hide"}
 
 weekend_days <- which( weekdays(imputed_d$date) == "Sunday" | weekdays(imputed_d$date) == "Saturday" )
 work_week <- which( weekdays(imputed_d$date) == "Sunday" & weekdays(imputed_d$date) != "Saturday" )
@@ -194,7 +167,8 @@ wfs <- summarise( group_by( weekend_frame, interval) , avg_steps=mean(steps) )
 par(mfrow=c(1,2))
 plot(wws$avg_steps, type="l", col="dark red", main="work week")
 plot(wfs$avg_steps, type="l", col="dark green", main="weekends")
-
+```
+```{r}
 # WEEKDAYS
 mean(wws$avg_steps)
 median(wws$avg_steps)

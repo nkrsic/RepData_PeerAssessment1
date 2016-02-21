@@ -11,6 +11,7 @@ reformat the date column.
 library(lubridate)
 library(dplyr)
 
+setwd("/home/nkrs/Documents/reproducible_research/project_1/working_dir/RepData_PeerAssessment1/")
 filen <- "activity.csv"
 
 d <- read.table(file=filen, header=TRUE, sep=",", stringsAsFactors = FALSE)
@@ -105,38 +106,6 @@ dd$avg_steps[ii]
 ## [1] 206.1698
 ```
 
-## nkrsic -- The time series
-
-
-```r
-date_tags <- as.character( d_final$date )
-n_dates <- length(date_tags)
-1 : n_dates
-plot( 1:n_dates, 
-      y=d_final$total_steps, 
-      type="l", 
-      lwd="2", 
-      col="dark red", 
-      main="Total steps by day",
-      xlab="Day",
-      ylab="Total no. steps", 
-      ljoin=2
-    )
-
-points( x=1:n_dates, 
-        y=d_final$total_steps , 
-        pch=20,
-        col="dark red"
-      )    
-```
-
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)
-
-```r
-# Might be a good idea to account for missing
-# dates by some signal. 
-```
-
 
 ## Imputing missing values
 
@@ -186,7 +155,7 @@ hist( ddd$total_steps, breaks=length( unique(ddd$total_steps)),
     )
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)
 
 ```r
 # Calculate and report mean, median
@@ -209,13 +178,59 @@ print( median_2 - median_1 )
 ## [1] -194
 ```
 
-```r
-# plot( x=c(1,1), y=c(median_1, NA), col="dark green", type="p")
-# points( x=1, y=median_2, col="dark red", pch=23 )
-# 
-# plot( x=c(1,1), y=c(mean_1, NA), col="dark green", type="p")
-# points( x=1, y=mean_2, col="dark red", pch=23 )
-```
-
+**NOTE: Imputing data has decreased the mean and mean values.**
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+
+```r
+weekend_days <- which( weekdays(imputed_d$date) == "Sunday" | weekdays(imputed_d$date) == "Saturday" )
+work_week <- which( weekdays(imputed_d$date) == "Sunday" & weekdays(imputed_d$date) != "Saturday" )
+
+work_week_frame <- imputed_d[ work_week, ]
+wws <- summarise( group_by( work_week_frame, interval) , avg_steps=mean(steps) )
+
+weekend_frame <- imputed_d[ weekend_days, ]
+wfs <- summarise( group_by( weekend_frame, interval) , avg_steps=mean(steps) )
+
+
+par(mfrow=c(1,2))
+plot(wws$avg_steps, type="l", col="dark red", main="work week")
+plot(wfs$avg_steps, type="l", col="dark green", main="weekends")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)
+
+```r
+# WEEKDAYS
+mean(wws$avg_steps)
+```
+
+```
+## [1] 41.86155
+```
+
+```r
+median(wws$avg_steps)
+```
+
+```
+## [1] 25.43446
+```
+
+```r
+# WEEKEND
+mean(wfs$avg_steps)
+```
+
+```
+## [1] 42.20003
+```
+
+```r
+median(wfs$avg_steps)
+```
+
+```
+## [1] 32.53771
+```
