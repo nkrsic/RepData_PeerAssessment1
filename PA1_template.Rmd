@@ -16,6 +16,7 @@ reformat the date column.
 library(lubridate)
 library(dplyr)
 
+setwd("/home/nkrs/Documents/reproducible_research/project_1/working_dir/RepData_PeerAssessment1/")
 filen <- "activity.csv"
 
 d <- read.table(file=filen, header=TRUE, sep=",", stringsAsFactors = FALSE)
@@ -177,3 +178,28 @@ print( median_2 - median_1 )
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
+```{r}
+weekdays( imputed_d$date )
+
+weekend_days <- which( weekdays(imputed_d$date) == "Sunday" | weekdays(imputed_d$date) == "Saturday" )
+work_week <- which( weekdays(imputed_d$date) == "Sunday" & weekdays(imputed_d$date) != "Saturday" )
+
+work_week_frame <- imputed_d[ work_week, ]
+wws <- summarise( group_by( work_week_frame, interval) , avg_steps=mean(steps) )
+
+weekend_frame <- imputed_d[ weekend_days, ]
+wfs <- summarise( group_by( weekend_frame, interval) , avg_steps=mean(steps) )
+
+
+par(mfrow=c(1,2))
+plot(wws$avg_steps, type="l", col="dark red", main="work week")
+plot(wfs$avg_steps, type="l", col="dark green", main="weekends")
+
+# WEEKDAYS
+mean(wws$avg_steps)
+median(wws$avg_steps)
+
+# WEEKEND
+mean(wfs$avg_steps)
+median(wfs$avg_steps)
+```
