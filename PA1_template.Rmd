@@ -171,12 +171,9 @@ median_2 <- median(ddd$total_steps)
 print( mean_2 - mean_1 )
 print( median_2 - median_1 )
 
-# plot( x=c(1,1), y=c(median_1, NA), col="dark green", type="p")
-# points( x=1, y=median_2, col="dark red", pch=23 )
-# 
-# plot( x=c(1,1), y=c(mean_1, NA), col="dark green", type="p")
-# points( x=1, y=mean_2, col="dark red", pch=23 )
 ```
 
+**NOTE: Imputing data has decreased the mean and mean values.**
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
