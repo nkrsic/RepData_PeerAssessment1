@@ -146,6 +146,7 @@ dd$avg_steps[ii]</code></pre>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
 <p>In the data processing step above, we calculated <em>na_idx</em> and <em>na_count</em>.</p>
+<p>We’ll calculated averages by day. Some days don’t have any valid observations so we use the avg value of nearby days (ie the mean of the previous and next days). There are two consecutive days of no valid observations, so for these we use the nearest observations (in terms of time).</p>
 <pre class="r"><code>avg_daily_steps_w_na &lt;- group_by(d, date) %&gt;% summarize( avg_steps=mean(steps, na.rm=FALSE) )
 missing_days &lt;- which( is.na(avg_daily_steps_w_na$avg_steps) )
 

@@ -95,6 +95,11 @@ dd$avg_steps[ii]
 
 In the data processing step above, we calculated _na_idx_ and _na_count_.
 
+We'll calculated averages by day. Some days don't have any valid observations so we 
+use the avg value of nearby days (ie the mean of the previous and next days). There
+are two consecutive days of no valid observations, so for these we use the nearest
+observations (in terms of time). 
+
 ```{r}
 
 avg_daily_steps_w_na <- group_by(d, date) %>% summarize( avg_steps=mean(steps, na.rm=FALSE) )
